@@ -21,9 +21,9 @@ class ArrayBoom extends Phaser.Scene {
 
     preload() {
         this.load.setPath("./assets/");
-        this.load.image("elephant", "elephant.png");
+        this.load.image("playerP", "playerP.png");
         this.load.image("heart", "heart.png");
-        this.load.image("hippo", "hippo.png");
+        this.load.image("enemyD", "enemyD.png");
 
         // For animation
         this.load.image("whitePuff00", "whitePuff00.png");
@@ -46,12 +46,12 @@ class ArrayBoom extends Phaser.Scene {
     create() {
         let my = this.my;
 
-        my.sprite.elephant = this.add.sprite(game.config.width/2, game.config.height - 40, "elephant");
-        my.sprite.elephant.setScale(0.25);
+        my.sprite.playerP = this.add.sprite(game.config.width/2, game.config.height - 40, "playerP");
+        my.sprite.playerP.setScale(2);
 
-        my.sprite.hippo = this.add.sprite(game.config.width/2, 80, "hippo");
-        my.sprite.hippo.setScale(0.25);
-        my.sprite.hippo.scorePoints = 25;
+        my.sprite.enemyD = this.add.sprite(game.config.width/2, 80, "enemyD");
+        my.sprite.enemyD.setScale(3);
+        my.sprite.enemyD.scorePoints = 5;
 
         // Notice that in this approach, we don't create any bullet sprites in create(),
         // and instead wait until we need them, based on the number of space bar presses
@@ -87,7 +87,7 @@ class ArrayBoom extends Phaser.Scene {
         my.text.score = this.add.bitmapText(580, 0, "rocketSquare", "Score " + this.myScore);
 
         // Put title on screen
-        this.add.text(10, 5, "Hippo Hug!", {
+        this.add.text(10, 5, "Defeat the Hive.", {
             fontFamily: 'Times, serif',
             fontSize: 24,
             wordWrap: {
@@ -103,16 +103,16 @@ class ArrayBoom extends Phaser.Scene {
         // Moving left
         if (this.left.isDown) {
             // Check to make sure the sprite can actually move left
-            if (my.sprite.elephant.x > (my.sprite.elephant.displayWidth/2)) {
-                my.sprite.elephant.x -= this.playerSpeed;
+            if (my.sprite.playerP.x > (my.sprite.playerP.displayWidth/2)) {
+                my.sprite.playerP.x -= this.playerSpeed;
             }
         }
 
         // Moving right
         if (this.right.isDown) {
             // Check to make sure the sprite can actually move right
-            if (my.sprite.elephant.x < (game.config.width - (my.sprite.elephant.displayWidth/2))) {
-                my.sprite.elephant.x += this.playerSpeed;
+            if (my.sprite.playerP.x < (game.config.width - (my.sprite.playerP.displayWidth/2))) {
+                my.sprite.playerP.x += this.playerSpeed;
             }
         }
 
@@ -121,7 +121,7 @@ class ArrayBoom extends Phaser.Scene {
             // Are we under our bullet quota?
             if (my.sprite.bullet.length < this.maxBullets) {
                 my.sprite.bullet.push(this.add.sprite(
-                    my.sprite.elephant.x, my.sprite.elephant.y-(my.sprite.elephant.displayHeight/2), "heart")
+                    my.sprite.playerP.x, my.sprite.playerP.y-(my.sprite.playerP.displayHeight/2), "heart")
                 );
             }
         }
@@ -140,24 +140,24 @@ class ArrayBoom extends Phaser.Scene {
 
         // Check for collision with the hippo
         for (let bullet of my.sprite.bullet) {
-            if (this.collides(my.sprite.hippo, bullet)) {
+            if (this.collides(my.sprite.enemyD, bullet)) {
                 // start animation
-                this.puff = this.add.sprite(my.sprite.hippo.x, my.sprite.hippo.y, "whitePuff03").setScale(0.25).play("puff");
+                this.puff = this.add.sprite(my.sprite.enemyD.x, my.sprite.enemyD.y, "whitePuff03").setScale(0.25).play("puff");
                 // clear out bullet -- put y offscreen, will get reaped next update
                 bullet.y = -100;
-                my.sprite.hippo.visible = false;
-                my.sprite.hippo.x = -100;
+                my.sprite.enemyD.visible = false;
+                my.sprite.enemyD.x = -100;
                 // Update score
-                this.myScore += my.sprite.hippo.scorePoints;
+                this.myScore += my.sprite.enemyD.scorePoints;
                 this.updateScore();
                 // Play sound
                 this.sound.play("dadada", {
                     volume: 1   // Can adjust volume using this, goes from 0 to 1
                 });
-                // Have new hippo appear after end of animation
+                // Have new Enemy Drone appear after end of animation
                 this.puff.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
-                    this.my.sprite.hippo.visible = true;
-                    this.my.sprite.hippo.x = Math.random()*config.width;
+                    this.my.sprite.enemyD.visible = true;
+                    this.my.sprite.enemyD.x = Math.random()*config.width;
                 }, this);
 
             }
