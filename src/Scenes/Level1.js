@@ -1,4 +1,7 @@
 class Level1 extends Phaser.Scene {
+    curve;
+    path;
+
     constructor() {
         super("level1");
 
@@ -26,10 +29,11 @@ class Level1 extends Phaser.Scene {
         this.load.image("enemyD", "enemyD.png");
 
         // For animation
-        // this.load.image("ex0", "ex0.png");
+        this.load.image("ex0", "ex0.png");
         this.load.image("ex1", "ex1.png");
         this.load.image("ex2", "ex2.png");
         this.load.image("ex3", "ex3.png");
+        this.load.image("ex4", "ex4.png");
 
         // Load the Kenny Rocket Square bitmap font
         // This was converted from TrueType format into Phaser bitmap
@@ -57,6 +61,7 @@ class Level1 extends Phaser.Scene {
         // and instead wait until we need them, based on the number of space bar presses
 
         // Create explosion animation
+        
         this.anims.create({
             key: "ex",
             frames: [
@@ -64,16 +69,58 @@ class Level1 extends Phaser.Scene {
                 { key: "ex1" },
                 { key: "ex2" },
                 { key: "ex3" },
+                // { key: "ex4" },
             ],
             frameRate: 10,    // Note: case sensitive (thank you Ivy!)
             repeat: 0,
             hideOnComplete: true
+        });
+        // points to follow
+        this.points1 = [
+            60, 50,
+            740, 50,
+            60, 100,
+            740, 100,
+            60, 150,
+            740, 150,
+            60, 200,
+            740, 200,
+            60, 250,
+            740, 250,
+            60, 300,
+            740, 300,
+            60, 350,
+            740, 350,
+            60, 400,
+            740, 400,
+            60, 450,
+            740, 450,
+            60, 500,
+            740, 500,
+        ];
+        this.curve1 = new Phaser.Curves.Spline(this.points1);
+
+        // my.sprite.enemyD = this.add.follower(this.curve, 10, 10, "enemyD");
+
+        my.sprite.e1 = this.add.follower(this.curve1, 60, 50, "enemyD");
+        my.sprite.e1.setScale(3);
+        my.sprite.e1.scorePoints = 5;
+        my.sprite.e1.startFollow({
+            duration: 20000, // Duration of movement in milliseconds
+            yoyo: true, // Move back and forth along the path
+            repeat: 0, // Repeat indefinitely
+            // ease: 'Sine.easeInOut',
+            rotateToPath: true, // Rotate the sprite to match the path direction
+            // rotationOffset: -90 // Adjust rotation offset if needed
+            rotationOffset: 90
         });
 
         // Create key objects
         this.left = this.input.keyboard.addKey("A");
         this.right = this.input.keyboard.addKey("D");
         this.nextScene = this.input.keyboard.addKey("S");
+        this.menu = this.input.keyboard.addKey("M");
+        this.restart = this.input.keyboard.addKey("R");
         this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Set movement speeds (in pixels/tick)
@@ -81,13 +128,13 @@ class Level1 extends Phaser.Scene {
         this.bulletSpeed = 6;
 
         // update HTML description
-        document.getElementById('description').innerHTML = '<h2>Level 1</h2><br>A: left // D: right // Space: fire/emit // S: Next Scene'
+        document.getElementById('description').innerHTML = '<h2>Level 1</h2><br>A: left // D: right // Space: fire'
 
         // Put score on screen
         my.text.score = this.add.bitmapText(580, 0, "rocketSquare", "Score " + this.myScore);
 
         // Put title on screen
-        this.add.text(10, 5, "Defeat the Hive.", {
+        this.add.text(10, 5, "Score over 100 for next level", {
             fontFamily: 'Times, serif',
             fontSize: 24,
             wordWrap: {
@@ -159,7 +206,26 @@ class Level1 extends Phaser.Scene {
                     this.my.sprite.enemyD.visible = true;
                     this.my.sprite.enemyD.x = Math.random()*config.width;
                 }, this);
-
+            }
+            if (this.collides(my.sprite.e1, bullet)) {
+                // start animation
+                this.ex = this.add.sprite(my.sprite.e1.x, my.sprite.e1.y, "ex1").setScale(4).play("ex");
+                // clear out bullet -- put y offscreen, will get reaped next update
+                bullet.y = -100;
+                my.sprite.e1.visible = false;
+                my.sprite.e1.x = -100;
+                // Update score
+                this.myScore += my.sprite.e1.scorePoints;
+                this.updateScore();
+                // Play sound
+                this.sound.play("boom", {
+                    volume: 1   // Can adjust volume using this, goes from 0 to 1
+                });
+                // Have new Enemy Drone appear after end of animation
+                this.ex.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
+                    this.my.sprite.e1.visible = true;
+                    this.my.sprite.e1.x = Math.random()*config.width;
+                }, this);
             }
         }
 
@@ -171,6 +237,14 @@ class Level1 extends Phaser.Scene {
         // if (Phaser.Input.Keyboard.JustDown(this.nextScene)) {
         //     this.scene.start("fixedArrayBullet");
         // }
+        if (Phaser.Input.Keyboard.JustDown(this.menu)) {
+            this.scene.start("title");
+        }
+        if (Phaser.Input.Keyboard.JustDown(this.restart)) {
+            // this.myScore = 0;
+            this.scene.restart("level1");
+            this.myScore = 0;
+        }
 
     }
 

@@ -16,7 +16,7 @@ let config = {
     width: 800,
     height: 600,
     backgroundColor: '#30c4ff',
-    scene: [Level1]
+    scene: [Title, Level1]
     // scene: [SingleBullet, ArrayBullet, FixedArrayBullet, GroupBullet, ClassBullet, ArrayBoom]
 }
 
