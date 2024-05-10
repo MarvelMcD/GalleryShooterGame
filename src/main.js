@@ -1,11 +1,4 @@
-// Jim Whitehead
-// Created: 4/25/2024
-// Phaser: 3.70.0
-//
-// Bullet Time
-//
-// Multiple examples of how to implement bullet firing logic using Phaser
-// 
+
 // Art assets from Kenny Assets:
 // https://kenney.nl/assets/
 
@@ -22,6 +15,7 @@ let config = {
     fps: { forceSetTimeOut: true, target: 60 },   // ensure consistent timing across machines
     width: 800,
     height: 600,
+    backgroundColor: '#30c4ff',
     scene: [ArrayBoom]
     // scene: [SingleBullet, ArrayBullet, FixedArrayBullet, GroupBullet, ClassBullet, ArrayBoom]
 }

@@ -12,7 +12,7 @@ class ArrayBoom extends Phaser.Scene {
         // The bullet property has a value which is an array.
         // This array will hold bindings (pointers) to bullet sprites
         this.my.sprite.bullet = [];   
-        this.maxBullets = 10;           // Don't create more than this many bullets
+        this.maxBullets = 8;           // Don't create more than this many bullets
         
         this.myScore = 0;       // record a score as a class variable
         // More typically want to use a global variable for score, since
@@ -22,14 +22,14 @@ class ArrayBoom extends Phaser.Scene {
     preload() {
         this.load.setPath("./assets/");
         this.load.image("playerP", "playerP.png");
-        this.load.image("heart", "heart.png");
+        this.load.image("bullet", "bullet.png");
         this.load.image("enemyD", "enemyD.png");
 
         // For animation
-        this.load.image("whitePuff00", "whitePuff00.png");
-        this.load.image("whitePuff01", "whitePuff01.png");
-        this.load.image("whitePuff02", "whitePuff02.png");
-        this.load.image("whitePuff03", "whitePuff03.png");
+        // this.load.image("ex0", "ex0.png");
+        this.load.image("ex1", "ex1.png");
+        this.load.image("ex2", "ex2.png");
+        this.load.image("ex3", "ex3.png");
 
         // Load the Kenny Rocket Square bitmap font
         // This was converted from TrueType format into Phaser bitmap
@@ -40,7 +40,7 @@ class ArrayBoom extends Phaser.Scene {
 
         // Sound asset from the Kenny Music Jingles pack
         // https://kenney.nl/assets/music-jingles
-        this.load.audio("dadada", "jingles_NES13.ogg");
+        this.load.audio("boom", "boom.ogg");
     }
 
     create() {
@@ -56,17 +56,17 @@ class ArrayBoom extends Phaser.Scene {
         // Notice that in this approach, we don't create any bullet sprites in create(),
         // and instead wait until we need them, based on the number of space bar presses
 
-        // Create white puff animation
+        // Create white explosion animation
         this.anims.create({
-            key: "puff",
+            key: "ex",
             frames: [
-                { key: "whitePuff00" },
-                { key: "whitePuff01" },
-                { key: "whitePuff02" },
-                { key: "whitePuff03" },
+                //{ key: "ex1" },
+                { key: "ex2" },
+                { key: "ex3" },
+                { key: "ex4" },
             ],
-            frameRate: 20,    // Note: case sensitive (thank you Ivy!)
-            repeat: 5,
+            frameRate: 10,    // Note: case sensitive (thank you Ivy!)
+            repeat: 0,
             hideOnComplete: true
         });
 
@@ -77,11 +77,11 @@ class ArrayBoom extends Phaser.Scene {
         this.space = this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
 
         // Set movement speeds (in pixels/tick)
-        this.playerSpeed = 5;
-        this.bulletSpeed = 5;
+        this.playerSpeed = 8;
+        this.bulletSpeed = 6;
 
         // update HTML description
-        document.getElementById('description').innerHTML = '<h2>Array Boom.js</h2><br>A: left // D: right // Space: fire/emit // S: Next Scene'
+        document.getElementById('description').innerHTML = '<h2>Level 1</h2><br>A: left // D: right // Space: fire/emit // S: Next Scene'
 
         // Put score on screen
         my.text.score = this.add.bitmapText(580, 0, "rocketSquare", "Score " + this.myScore);
@@ -121,7 +121,7 @@ class ArrayBoom extends Phaser.Scene {
             // Are we under our bullet quota?
             if (my.sprite.bullet.length < this.maxBullets) {
                 my.sprite.bullet.push(this.add.sprite(
-                    my.sprite.playerP.x, my.sprite.playerP.y-(my.sprite.playerP.displayHeight/2), "heart")
+                    my.sprite.playerP.x, my.sprite.playerP.y-(my.sprite.playerP.displayHeight/2), "bullet")
                 );
             }
         }
@@ -142,7 +142,7 @@ class ArrayBoom extends Phaser.Scene {
         for (let bullet of my.sprite.bullet) {
             if (this.collides(my.sprite.enemyD, bullet)) {
                 // start animation
-                this.puff = this.add.sprite(my.sprite.enemyD.x, my.sprite.enemyD.y, "whitePuff03").setScale(0.25).play("puff");
+                this.ex = this.add.sprite(my.sprite.enemyD.x, my.sprite.enemyD.y, "ex1").setScale(4).play("ex");
                 // clear out bullet -- put y offscreen, will get reaped next update
                 bullet.y = -100;
                 my.sprite.enemyD.visible = false;
@@ -151,11 +151,11 @@ class ArrayBoom extends Phaser.Scene {
                 this.myScore += my.sprite.enemyD.scorePoints;
                 this.updateScore();
                 // Play sound
-                this.sound.play("dadada", {
+                this.sound.play("boom", {
                     volume: 1   // Can adjust volume using this, goes from 0 to 1
                 });
                 // Have new Enemy Drone appear after end of animation
-                this.puff.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
+                this.ex.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
                     this.my.sprite.enemyD.visible = true;
                     this.my.sprite.enemyD.x = Math.random()*config.width;
                 }, this);
