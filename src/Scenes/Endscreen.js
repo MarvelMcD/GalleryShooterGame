@@ -1,6 +1,6 @@
-class End extends Phaser.Scene {
+class Endscreen extends Phaser.Scene {
     constructor() {
-        super("end");
+        super("endscreen");
     }
     preload() {
         this.load.setPath("./assets/");
@@ -8,11 +8,11 @@ class End extends Phaser.Scene {
     }
     create() {
         this.add.bitmapText(game.config.width/2, game.config.height/2 - 50, "rocketSquare", "Game\n Over", 50).setOrigin(0.5);
-        this.add.bitmapText(game.config.width/2, 3 * game.config.height/4, "rocketSquare", "Press R to start", 32).setOrigin(0.5);
-        this.reset = this.input.keyboard.addKey("R");
+        this.add.bitmapText(game.config.width/2, 3 * game.config.height/4, "rocketSquare", "Press Q to start", 32).setOrigin(0.5);
+        this.resetGame = this.input.keyboard.addKey("Q");
     }
     update() {
-        if (Phaser.Input.Keyboard.JustDown(this.reset)) {
+        if (Phaser.Input.Keyboard.JustDown(this.resetGame)) {
             this.scene.start("level1");
         }
     }

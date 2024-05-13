@@ -24,30 +24,30 @@ class Level2 extends Phaser.Scene {
     }
 
     preload() {
-        this.load.setPath("./assets/");
-        this.load.image("playerP", "playerP.png");
-        this.load.image("bullet", "bullet.png");
-        this.load.image("bomb", "bomb.png");
-        this.load.image("enemyD", "enemyD.png");
-        this.load.image("enemyB", "enemyB.png");
+        // this.load.setPath("./assets/");
+        // this.load.image("playerP", "playerP.png");
+        // this.load.image("bullet", "bullet.png");
+        // this.load.image("bomb", "bomb.png");
+        // this.load.image("enemyD", "enemyD.png");
+        // this.load.image("enemyB", "enemyB.png");
 
-        // For animation
-        this.load.image("ex0", "ex0.png");
-        this.load.image("ex1", "ex1.png");
-        this.load.image("ex2", "ex2.png");
-        this.load.image("ex3", "ex3.png");
-        this.load.image("ex4", "ex4.png");
+        // // For animation
+        // this.load.image("ex0", "ex0.png");
+        // this.load.image("ex1", "ex1.png");
+        // this.load.image("ex2", "ex2.png");
+        // this.load.image("ex3", "ex3.png");
+        // this.load.image("ex4", "ex4.png");
 
         // Load the Kenny Rocket Square bitmap font
         // This was converted from TrueType format into Phaser bitmap
         // format using the BMFont tool.
         // BMFont: https://www.angelcode.com/products/bmfont/
-        // Tutorial: https://dev.to/omar4ur/how-to-create-bitmap-fonts-for-phaser-js-with-bmfont-2ndc
-        this.load.bitmapFont("rocketSquare", "KennyRocketSquare_0.png", "KennyRocketSquare.fnt");
+        // // Tutorial: https://dev.to/omar4ur/how-to-create-bitmap-fonts-for-phaser-js-with-bmfont-2ndc
+        // this.load.bitmapFont("rocketSquare", "KennyRocketSquare_0.png", "KennyRocketSquare.fnt");
 
-        // Sound asset from the Kenny Music Jingles pack
-        // https://kenney.nl/assets/music-jingles
-        this.load.audio("boom", "boom.ogg");
+        // // Sound asset from the Kenny Music Jingles pack
+        // // https://kenney.nl/assets/music-jingles
+        // this.load.audio("boom", "boom.ogg");
     }
 
     create() {
@@ -66,19 +66,19 @@ class Level2 extends Phaser.Scene {
 
         // Create explosion animation
         
-        this.anims.create({
-            key: "ex",
-            frames: [
-                //{ key: "ex0" },
-                { key: "ex1" },
-                { key: "ex2" },
-                { key: "ex3" },
-                // { key: "ex4" },
-            ],
-            frameRate: 10,    // Note: case sensitive (thank you Ivy!)
-            repeat: 0,
-            hideOnComplete: true
-        });
+        // this.anims.create({
+        //     key: "ex",
+        //     frames: [
+        //         //{ key: "ex0" },
+        //         { key: "ex1" },
+        //         { key: "ex2" },
+        //         { key: "ex3" },
+        //         // { key: "ex4" },
+        //     ],
+        //     frameRate: 10,    // Note: case sensitive (thank you Ivy!)
+        //     repeat: 0,
+        //     hideOnComplete: true
+        // });
         // points to follow
         this.points1 = [
             60, 50,
@@ -126,7 +126,7 @@ class Level2 extends Phaser.Scene {
         my.text.score = this.add.bitmapText(580, 0, "rocketSquare", "Score " + this.myScore);
 
         // Put title on screen
-        this.add.text(10, 5, "Score over 100 for next level", {
+        this.add.text(10, 5, "Endless Mode", {
             fontFamily: 'Times, serif',
             fontSize: 24,
             wordWrap: {
@@ -197,6 +197,7 @@ class Level2 extends Phaser.Scene {
                 this.ex.on(Phaser.Animations.Events.ANIMATION_COMPLETE, () => {
                     this.my.sprite.enemyD.visible = true;
                     this.my.sprite.enemyD.x = Math.random()*config.width;
+                    this.my.sprite.enemyD.y = -my.sprite.enemyD.displayHeight;
                 }, this);
             }
             if (this.collides(my.sprite.e1, bullet)) {
@@ -277,11 +278,12 @@ class Level2 extends Phaser.Scene {
         let my = this.my;
         my.text.score.setText("Score " + this.myScore);
 
-        // if (this.myScore >= 100) {
+        // if (this.myScore >= 10) {
         //     this.myScore = 0;
-        //     this.scene.start('level2');
+        //     this.scene.start('Endscreen');
         // }
     }
+    
 
 }
          
