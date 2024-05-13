@@ -126,7 +126,7 @@ class Level1 extends Phaser.Scene {
         my.text.score = this.add.bitmapText(580, 0, "rocketSquare", "Score " + this.myScore);
 
         // Put title on screen
-        this.add.text(10, 5, "Score over 25 for next level", {
+        this.add.text(10, 5, "Score over 50 for next level", {
             fontFamily: 'Times, serif',
             fontSize: 24,
             wordWrap: {
@@ -277,7 +277,7 @@ class Level1 extends Phaser.Scene {
         let my = this.my;
         my.text.score.setText("Score " + this.myScore);
 
-        if (this.myScore >= 25) {
+        if (this.myScore >= 50) {
             this.myScore = 0;
             this.scene.start('level2');
         }
