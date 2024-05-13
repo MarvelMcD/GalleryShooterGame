@@ -1,9 +1,9 @@
-class Level1 extends Phaser.Scene {
+class Level2 extends Phaser.Scene {
     curve;
     path;
 
     constructor() {
-        super("level1");
+        super("level2");
 
         // Initialize a class variable "my" which is an object.
         // The object has two properties, both of which are objects
@@ -259,8 +259,9 @@ class Level1 extends Phaser.Scene {
         }
         if (Phaser.Input.Keyboard.JustDown(this.restart)) {
             // this.myScore = 0;
-            this.scene.restart("level1");
+            this.scene.restart("level2");
             this.myScore = 0;
+            this.scene.start('level1');
         }
 
     }
