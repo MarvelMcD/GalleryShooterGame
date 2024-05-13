@@ -120,7 +120,7 @@ class Level2 extends Phaser.Scene {
         this.droneSpeed = 4;
 
         // update HTML description
-        document.getElementById('description').innerHTML = '<h2>Level 1</h2><br>A: left // D: right // Space: fire // R: restart // M: Menu' 
+        document.getElementById('description').innerHTML = '<h2>Endless Mode</h2><br>A: left // D: right // Space: fire // R: restart // M: Menu' 
 
         // Put score on screen
         my.text.score = this.add.bitmapText(580, 0, "rocketSquare", "Score " + this.myScore);
